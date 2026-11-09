@@ -17,7 +17,7 @@ with raw_fact as (
         $9::varchar   as markdown5,
         $10::numeric  as cpi,
         $11::numeric  as unemployment
-    from '{{ source('s3_stage_source', '@WALMART_S3_STAGE/fact.csv') }}'
+    from '@WALMART_DEA_DB.RAW_LANDING.WALMART_S3_STAGE/fact.csv'
     where $1 != 'Store' and $1 is not null
 ),
 
@@ -25,8 +25,9 @@ raw_department as (
     select
         $1::integer as store_id,
         $2::integer as dept_id,
-        $3::numeric as weekly_sales
-    from '{{ source('s3_stage_source', '@WALMART_S3_STAGE/department.csv') }}'
+        $3::date    as sales_date,
+        $4::numeric as weekly_sales  -- 4th column is Weekly_Sales
+    from '@WALMART_DEA_DB.RAW_LANDING.WALMART_S3_STAGE/department.csv'
     where $1 != 'Store' and $1 is not null
 ),
 
@@ -34,7 +35,7 @@ raw_stores as (
     select
         $1::integer as store_id,
         $3::numeric as store_size
-    from '{{ source('s3_stage_source', '@WALMART_S3_STAGE/stores.csv') }}'
+    from '@WALMART_DEA_DB.RAW_LANDING.WALMART_S3_STAGE/stores.csv'
     where $1 != 'Store' and $1 is not null
 ),
 
@@ -57,6 +58,7 @@ joined_sources as (
     from raw_fact f
     inner join raw_department d
         on f.store_id = d.store_id
+       and f.sales_date = d.sales_date
     left join raw_stores s
         on f.store_id = s.store_id
 ),

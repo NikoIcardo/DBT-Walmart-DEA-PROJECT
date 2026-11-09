@@ -2,9 +2,10 @@ version: 2
 
 sources:
   - name: s3_stage_source
-    database: WALMART_DEA_DB
-    schema: RAW_LANDING
     tables:
-      - name: "@WALMART_S3_STAGE/stores.csv"
-      - name: "@WALMART_S3_STAGE/fact.csv"
-      - name: "@WALMART_S3_STAGE/department.csv"
+      - name: fact_csv
+        identifier: "@WALMART_DEA_DB.RAW_LANDING.WALMART_S3_STAGE/fact.csv"
+      - name: stores_csv
+        identifier: "@WALMART_DEA_DB.RAW_LANDING.WALMART_S3_STAGE/stores.csv"
+      - name: department_csv
+        identifier: "@WALMART_DEA_DB.RAW_LANDING.WALMART_S3_STAGE/department.csv"

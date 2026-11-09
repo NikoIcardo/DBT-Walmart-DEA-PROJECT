@@ -8,11 +8,10 @@ with raw_fact as (
     select
         $2::date     as date_val,
         $12::boolean as is_holiday
-    from '{{ source('s3_stage_source', '@WALMART_S3_STAGE/fact.csv') }}'
+    from '@WALMART_DEA_DB.RAW_LANDING.WALMART_S3_STAGE/fact.csv'
     where $2 != 'Date' and $2 is not null
 ),
 
--- Deduplicate dates and pick a single holiday status per date
 deduped_dates as (
     select
         date_val,

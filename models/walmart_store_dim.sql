@@ -9,15 +9,15 @@ with stores as (
         $1::integer as store_id,
         $2::varchar as store_type,
         $3::numeric as store_size
-    from '{{ source('s3_stage_source', '@WALMART_S3_STAGE/stores.csv') }}'
+    from '@WALMART_DEA_DB.RAW_LANDING.WALMART_S3_STAGE/stores.csv'
     where $1 != 'Store' and $1 is not null
 ),
 
 departments as (
     select distinct
-        $1::integer as store_id,   
-        $2::integer as dept_id     
-    from '{{ source('s3_stage_source', '@WALMART_S3_STAGE/department.csv') }}'
+        $1::integer as store_id,
+        $2::integer as dept_id
+    from '@WALMART_DEA_DB.RAW_LANDING.WALMART_S3_STAGE/department.csv'
     where $1 != 'Store' and $1 is not null
 ),
 
